@@ -1,5 +1,6 @@
 package com.pingvini.mobilecooking.model;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 import java.util.List;
@@ -12,12 +13,12 @@ public class Recipe {
     private String name;
     private String description;
     private List<String> ingredients;
-    private Image image;
-    private double rating;
+    private Bitmap image;
+    private float rating;
     private int votes;
     private int userId;
 
-    public Recipe(String name, String description, List<String> ingredients, Image image, double rating, int votes, int userId) {
+    public Recipe(String name, String description, List<String> ingredients, Bitmap image, float rating, int votes, int userId) {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -43,19 +44,19 @@ public class Recipe {
         this.description = description;
     }
 
-    public Image getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

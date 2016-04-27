@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.pingvini.mobilecooking.R;
 import com.pingvini.mobilecooking.model.Recipe;
 
 import java.util.List;
@@ -29,29 +30,32 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public RecipeAdapter.RecipeViewHolder onCreateViewHolder(ViewGroup parent, int i) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_invoice, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipe, parent, false);
         return new RecipeViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(RecipeViewHolder ivh, int i) {
-
+    public void onBindViewHolder(RecipeViewHolder rvh, int i) {
+        rvh.rating.setRating(recipes.get(i).getRating());
+        rvh.image.setImageBitmap(recipes.get(i).getImage());
+        rvh.textName.setText(recipes.get(i).getName());
     }
 
     public static class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView textName;
-        public TextView textDescription;
         public ImageView image;
         public RatingBar rating;
-        public TextView textVotes;
-        public TextView textUser;
-        public ListView ingredients;
+        public Context context;
 
         public RecipeViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
 
+            textName = (TextView)view.findViewById(R.id.text_item_name);
+            image = (ImageView)view.findViewById(R.id.image_item_recipe);
+            rating = (RatingBar)view.findViewById(R.id.rating_item_recipe);
+            context = itemView.getContext();
         }
 
         @Override
