@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         recipe.setRating((float)recipeObject.getDouble("rating"));
                         recipe.setVotes(recipeObject.getInt("votes"));
                         recipe.setUserId(recipeObject.getInt("userId"));
+                        recipe.setId(recipeObject.getInt("id"));
 
                         recipes.add(recipe);
                     }

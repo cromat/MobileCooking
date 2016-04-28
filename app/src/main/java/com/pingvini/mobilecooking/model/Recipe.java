@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class Recipe {
 
+    private String id;
     private String name;
     private String description;
     private List<String> ingredients;
@@ -26,6 +27,17 @@ public class Recipe {
         this.votes = votes;
         this.userId = userId;
         this.ingredients = ingredients;
+    }
+
+    public Recipe(String id, String name, String description, List<String> ingredients, Bitmap image, float rating, int votes, int userId) {
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.rating = rating;
+        this.votes = votes;
+        this.userId = userId;
+        this.ingredients = ingredients;
+        this.id = id;
     }
 
     public Recipe(){
@@ -86,5 +98,13 @@ public class Recipe {
 
     public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
