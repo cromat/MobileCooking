@@ -28,6 +28,10 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public Recipe(){
+
+    }
+
     public String getName() {
         return name;
     }
@@ -80,7 +84,7 @@ public class Recipe {
         return ingredients;
     }
 
-    public void setUserId(List<String> ingredients) {
+    public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
     }
 }

@@ -16,18 +16,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.pingvini.mobilecooking.model.Recipe;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+    public List<Recipe> recipes;
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
@@ -39,6 +45,46 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        recipes = new ArrayList<Recipe>();
+
+        // Initializing Parse connection
+        Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
+                .applicationId("pingvini")
+                .server("http://pingvini-mbcooking.rhcloud.com/parse/")
+                .build()
+        );
+
+        // Getting all recipe objects from Parse
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> recipeObjects, ParseException e) {
+                if (e == null) {
+
+//                    ParseObject.deleteAllInBackground(recipeObjects);
+
+                    for (ParseObject recipeObject : recipeObjects) {
+                        Recipe recipe = new Recipe();
+                        recipe.setName(recipeObject.getString("name"));
+                        recipe.setDescription(recipeObject.getString("description"));
+
+//                        List<String> ingredients = Arrays.asList(recipeObject.getString("ingredients")
+//                                .split(";"));
+
+//                        recipe.setIngredients(ingredients);
+                        //TODO Provjeriti kako se image sprema i dohvaca
+
+                        recipe.setRating((float)recipeObject.getDouble("rating"));
+                        recipe.setVotes(recipeObject.getInt("votes"));
+                        recipe.setUserId(recipeObject.getInt("userId"));
+
+                        recipes.add(recipe);
+                    }
+                } else {
+                    // handle Parse Exception here
+                }
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
