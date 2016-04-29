@@ -1,5 +1,6 @@
 package com.pingvini.mobilecooking;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         recipe.setRating((float)recipeObject.getDouble("rating"));
                         recipe.setVotes(recipeObject.getInt("votes"));
                         recipe.setUserId(recipeObject.getInt("userId"));
-                        recipe.setId(recipeObject.getInt("id"));
+                        recipe.setId(recipeObject.getString("id"));
 
                         recipes.add(recipe);
                     }
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext() ,LoginActivity.class));
             }
         });
 
