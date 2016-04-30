@@ -1,5 +1,6 @@
 package com.pingvini.mobilecooking;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -50,12 +51,17 @@ public class MainActivity extends AppCompatActivity {
 
         recipes = new ArrayList<Recipe>();
 
-        // Initializing Parse connection
-        Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-                        .applicationId("pingvini")
-                        .server("http://pingvini-mbcooking.rhcloud.com/parse/")
-                        .build()
-        );
+        try {
+            // Initializing Parse connection
+            Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
+                    .applicationId("pingvini")
+                    .server("http://pingvini-mbcooking.rhcloud.com/parse/")
+                    .build()
+            );
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         // Getting all recipe objects from Parse
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
@@ -130,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext() ,LoginActivity.class));
             }
         });
 
