@@ -1,8 +1,8 @@
 package com.pingvini.mobilecooking;
 
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -25,6 +25,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.pingvini.mobilecooking.adapter.FragmentRecipesAdapter;
 import com.pingvini.mobilecooking.model.Recipe;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Recipe> recipes;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private FragmentRecipesAdapter fragmentRecipesAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -51,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing Parse connection
         Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-                .applicationId("pingvini")
-                .server("http://pingvini-mbcooking.rhcloud.com/parse/")
-                .build()
+                        .applicationId("pingvini")
+                        .server("http://pingvini-mbcooking.rhcloud.com/parse/")
+                        .build()
         );
 
         // Getting all recipe objects from Parse
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 //                        recipe.setIngredients(ingredients);
                         //TODO Provjeriti kako se image sprema i dohvaca
 
-                        recipe.setRating((float)recipeObject.getDouble("rating"));
+                        recipe.setRating((float) recipeObject.getDouble("rating"));
                         recipe.setVotes(recipeObject.getInt("votes"));
                         recipe.setUserId(recipeObject.getInt("userId"));
                         recipe.setId(recipeObject.getString("id"));
@@ -90,13 +91,37 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        TabLayout tabRecipes = (TabLayout) findViewById(R.id.tab_recipes);
+        tabRecipes.addTab(tabRecipes.newTab().setText("New"));
+        tabRecipes.addTab(tabRecipes.newTab().setText("Popular"));
+        tabRecipes.addTab(tabRecipes.newTab().setText("Your"));
+        tabRecipes.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        tabRecipes.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        fragmentRecipesAdapter = new FragmentRecipesAdapter(getSupportFragmentManager(), tabRecipes.getTabCount());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager = (ViewPager) findViewById(R.id.pager_recipes);
+        mViewPager.setAdapter(fragmentRecipesAdapter);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -105,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                startActivity(new Intent(getApplicationContext() ,LoginActivity.class));
             }
         });
 
@@ -132,77 +156,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
-        }
     }
 }
