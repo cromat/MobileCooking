@@ -1,9 +1,13 @@
 package com.pingvini.mobilecooking;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -36,13 +40,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public List<Recipe> recipes;
-
     private FragmentRecipesAdapter fragmentRecipesAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    private ActionBar actionBar;
     private ViewPager mViewPager;
+    private TabLayout tabRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,50 +64,20 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Getting all recipe objects from Parse
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> recipeObjects, ParseException e) {
-                if (e == null) {
-
-//                    ParseObject.deleteAllInBackground(recipeObjects);
-
-                    for (ParseObject recipeObject : recipeObjects) {
-                        Recipe recipe = new Recipe();
-                        recipe.setName(recipeObject.getString("name"));
-                        recipe.setDescription(recipeObject.getString("description"));
-
-//                        List<String> ingredients = Arrays.asList(recipeObject.getString("ingredients")
-//                                .split(";"));
-
-//                        recipe.setIngredients(ingredients);
-                        //TODO Provjeriti kako se image sprema i dohvaca
-
-                        recipe.setRating((float) recipeObject.getDouble("rating"));
-                        recipe.setVotes(recipeObject.getInt("votes"));
-                        recipe.setUserId(recipeObject.getInt("userId"));
-                        recipe.setId(recipeObject.getString("id"));
-
-                        recipes.add(recipe);
-                    }
-                } else {
-                    // handle Parse Exception here
-                }
-            }
-        });
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TabLayout tabRecipes = (TabLayout) findViewById(R.id.tab_recipes);
+        tabRecipes = (TabLayout) findViewById(R.id.tab_recipes);
         tabRecipes.addTab(tabRecipes.newTab().setText("New"));
         tabRecipes.addTab(tabRecipes.newTab().setText("Popular"));
         tabRecipes.addTab(tabRecipes.newTab().setText("Your"));
         tabRecipes.setTabGravity(TabLayout.GRAVITY_FILL);
 
+
         tabRecipes.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                tab.select();
                 mViewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -121,12 +92,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         fragmentRecipesAdapter = new FragmentRecipesAdapter(getSupportFragmentManager(), tabRecipes.getTabCount());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager_recipes);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ViewPager.SimpleOnPageChangeListener pageChangeListener = new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position){
+                super.onPageSelected(position);
+                TabLayout.Tab tab = tabRecipes.getTabAt(position);
+                tab.select();
+            }
+        };
         mViewPager.setAdapter(fragmentRecipesAdapter);
 
 
@@ -158,9 +141,15 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (id){
+            case R.id.action_settings:
+                return true;
+            case R.id.action_add_recipe:
+                startActivity(new Intent(getApplicationContext(), RecipeAddActivity.class));
+                return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

@@ -43,13 +43,12 @@ public class LoginActivity extends AppCompatActivity {
                     .server("http://pingvini-mbcooking.rhcloud.com/parse/")
                     .build()
             );
+            ParseFacebookUtils.initialize(this);
+            FacebookSdk.sdkInitialize(getApplicationContext());
         }
         catch (Exception e){
             e.printStackTrace();
         }
-
-        ParseFacebookUtils.initialize(this);
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_login);
 
@@ -93,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         userNameText = parseUser.getUsername();
         emailId = parseUser.getEmail();
         Toast.makeText(getApplicationContext(),
-                "Welcome back " + userNameText + "!", Toast.LENGTH_LONG)
+                "Welcome back!", Toast.LENGTH_LONG)
                 .show();
     }
 
@@ -129,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 Toast.makeText(getApplicationContext(),
-                        "Thank you for signing up" + userNameText + "!", Toast.LENGTH_LONG)
+                        "Thank you for signing up!", Toast.LENGTH_LONG)
                         .show();
             }
         });

@@ -1,6 +1,7 @@
 package com.pingvini.mobilecooking.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.pingvini.mobilecooking.R;
+import com.pingvini.mobilecooking.RecipeDetailsActivity;
 import com.pingvini.mobilecooking.model.Recipe;
 
 import java.util.List;
@@ -32,6 +34,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipe, parent, false);
         return new RecipeViewHolder(v);
+    }
+
+    public RecipeAdapter (List<Recipe> list) {
+
+        this.recipes = list;
+
     }
 
     @Override
@@ -60,7 +68,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         @Override
         public void onClick(View v) {
-
+            Intent intent = new Intent(v.getContext(), RecipeDetailsActivity.class);
+            intent.putExtra("recipe", recipes.get(getPosition()));
+            context.startActivity(intent);
         }
 
     }

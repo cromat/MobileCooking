@@ -3,12 +3,14 @@ package com.pingvini.mobilecooking.model;
 import android.graphics.Bitmap;
 import android.media.Image;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by mat on 28.04.16..
  */
-public class Recipe {
+public class Recipe implements Serializable{
 
     private String id;
     private String name;
@@ -18,8 +20,9 @@ public class Recipe {
     private float rating;
     private int votes;
     private int userId;
+    private Date dateCreated;
 
-    public Recipe(String name, String description, List<String> ingredients, Bitmap image, float rating, int votes, int userId) {
+    public Recipe(String name, String description, List<String> ingredients, Bitmap image, float rating, int votes, int userId, Date dateCreated) {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -27,9 +30,10 @@ public class Recipe {
         this.votes = votes;
         this.userId = userId;
         this.ingredients = ingredients;
+        this.dateCreated = dateCreated;
     }
 
-    public Recipe(String id, String name, String description, List<String> ingredients, Bitmap image, float rating, int votes, int userId) {
+    public Recipe(String id, String name, String description, List<String> ingredients, Bitmap image, float rating, int votes, int userId, Date dateCreated) {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -38,6 +42,7 @@ public class Recipe {
         this.userId = userId;
         this.ingredients = ingredients;
         this.id = id;
+        this.dateCreated = dateCreated;
     }
 
     public Recipe(){
@@ -92,7 +97,7 @@ public class Recipe {
         this.userId = userId;
     }
 
-    public List<String> getIngrediens() {
+    public List<String> getIngredients() {
         return ingredients;
     }
 
@@ -106,5 +111,13 @@ public class Recipe {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }
