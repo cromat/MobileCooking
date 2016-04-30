@@ -69,12 +69,11 @@ public class LoginActivity extends AppCompatActivity {
                                             .show();
                                 }
                                 else if (user.isNew()){
-                                    Log.d("MobileCooking","New user!");
-                                    //dohvati podatke
+                                    getUsersDetailsFromFB();
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 }
                                 else{
-                                    Log.d("MobileCooking","Already connected!");
+                                    getUserDetailsFromParse();
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                                 }
